@@ -1,0 +1,27 @@
+# Smithery configuration file
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      headless:
+        type: boolean
+        description: "Run browser in headless mode"
+        default: false
+      debugMode:
+        type: boolean
+        description: "Enable debug logging"
+        default: false
+  commandFunction:
+    |-
+    (config) => ({
+      command: 'node',
+      args: ['dist/index.js'],
+      env: {
+        HEADLESS: config.headless ? 'true' : 'false',
+        DEBUG: config.debugMode ? 'true' : 'false'
+      }
+    })
+build:
+  dockerfile: Dockerfile
+  dockerBuildPath: .
