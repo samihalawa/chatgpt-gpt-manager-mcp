@@ -1,76 +1,59 @@
 {
   "name": "chatgpt-gpt-manager",
   "version": "1.0.0",
-  "description": "Model Context Protocol for managing ChatGPT custom GPTs",
-  "type": "module",
+  "description": "MCP server for creating, managing, and testing custom GPTs on ChatGPT",
   "main": "dist/index.js",
   "bin": {
-    "chatgpt-gpt-manager": "dist/index.js",
-    "gpt-manager": "dist/index.js"
+    "chatgpt-gpt-manager": "dist/index.js"
   },
+  "files": [
+    "dist",
+    "publicresources",
+    "mcp-configs",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
     "prepare": "npm run build",
-    "test": "npx @modelcontextprotocol/inspector .",
-    "release": "npm version patch && ./scripts/mcp-deploy.sh npm",
-    "deploy:npm": "./scripts/mcp-deploy.sh npm",
-    "deploy:docker": "./scripts/mcp-deploy.sh docker",
-    "deploy:all": "./scripts/mcp-deploy.sh all",
-    "smithery": "node scripts/run-with-smithery.js",
-    "smithery:key": "./scripts/run-with-smithery-key.sh",
-    "smithery:install": "./scripts/smithery-install.sh",
-    "smithery:run": "./scripts/smithery-run.sh"
+    "lint": "eslint 'src/**/*.ts'",
+    "test": "echo \"No tests implemented yet\""
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/samihalawa/chatgpt-gpt-manager.git"
   },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.6.0",
-    "puppeteer": "^23.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.24",
-    "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "os": [
-    "darwin",
-    "linux",
-    "win32"
-  ],
-  "cpu": [
-    "x64",
-    "arm64"
-  ],
   "keywords": [
+    "mcp",
     "chatgpt",
     "gpt",
     "custom-gpt",
     "management",
     "automation",
     "testing",
-    "mcp",
-    "modelcontextprotocol",
-    "browser-automation",
-    "puppeteer",
-    "ui-testing"
+    "modelcontextprotocol"
   ],
   "author": "samihalawa",
   "license": "MIT",
-  "cdn": {
-    "icons": {
-      "png": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/icon.png",
-      "svg": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/icon.svg"
-    },
-    "screenshots": {
-      "demo1": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/demo1.png",
-      "demo2": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/demo2.png"
-    }
+  "bugs": {
+    "url": "https://github.com/samihalawa/chatgpt-gpt-manager/issues"
+  },
+  "homepage": "https://github.com/samihalawa/chatgpt-gpt-manager#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.2",
+    "puppeteer": "^22.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

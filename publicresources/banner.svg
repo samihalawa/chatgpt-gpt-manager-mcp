@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1200" height="300" viewBox="0 0 1200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="300" rx="12" fill="#0F172A"/>
-  <rect x="40" y="40" width="1120" height="220" rx="8" fill="#1E293B"/>
-  
-  <!-- Logo -->
-  <circle cx="150" cy="150" r="80" fill="#10A37F"/>
-  <path d="M125 120L190 150L125 180V120Z" fill="white"/>
-  
-  <!-- Text -->
-  <text x="270" y="130" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white">ChatGPT Custom GPT Manager</text>
-  <text x="270" y="190" font-family="Arial, sans-serif" font-size="24" fill="#94A3B8">Create, configure, and test your custom GPTs</text>
-  
-  <!-- Decorative Elements -->
-  <rect x="900" y="80" width="160" height="40" rx="8" fill="#0F172A" stroke="#10A37F" stroke-width="2"/>
-  <rect x="900" y="140" width="220" height="40" rx="8" fill="#0F172A" stroke="#10A37F" stroke-width="2"/>
-  <rect x="900" y="200" width="140" height="40" rx="8" fill="#0F172A" stroke="#10A37F" stroke-width="2"/>
-  
-  <!-- Code Lines -->
-  <text x="910" y="107" font-family="monospace" font-size="16" fill="#F7FAFC">initialize_session()</text>
-  <text x="910" y="167" font-family="monospace" font-size="16" fill="#F7FAFC">create_custom_gpt("name")</text>
-  <text x="910" y="227" font-family="monospace" font-size="16" fill="#F7FAFC">publish_gpt(id)</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300">
+  <rect width="800" height="300" fill="#10a37f" />
+  <text x="50" y="120" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white">ChatGPT</text>
+  <text x="50" y="180" font-family="Arial, sans-serif" font-size="52" font-weight="bold" fill="white">GPT Manager</text>
+  <path d="M600 70 L750 70 C760 70 770 80 770 90 L770 210 C770 220 760 230 750 230 L600 230 C590 230 580 220 580 210 L580 90 C580 80 590 70 600 70 Z" fill="white" />
+  <rect x="600" y="100" width="140" height="24" rx="5" fill="#10a37f" />
+  <rect x="600" y="140" width="100" height="24" rx="5" fill="#10a37f" />
+  <rect x="600" y="180" width="120" height="24" rx="5" fill="#10a37f" />
 </svg> 

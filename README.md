@@ -1,26 +1,16 @@
-# ChatGPT Custom GPT Manager
+# ChatGPT GPT Manager
 
-An MCP (Model Context Protocol) server that helps you create, manage, and test custom GPTs on ChatGPT.
-
-<div align="center">
-  <img src="https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/banner.svg" alt="ChatGPT GPT Manager Banner" width="800"/>
-</div>
+An MCP (Model Context Protocol) server for creating, managing, and testing custom GPTs on ChatGPT.
 
 ## Features
 
-- 🤖 Create custom GPTs automatically
-- 🧪 Test custom GPTs with prompts
-- 📊 Capture test results and screenshots
-- 🔄 Manage multiple GPTs efficiently
-- 🚀 Compatible with any Claude client supporting MCP
+- Initialize browser sessions for ChatGPT
+- Create new custom GPTs with specified names and instructions
+- Test custom GPTs with specific prompts
+- Capture screenshots of the process
+- Work with multiple GPTs simultaneously
 
 ## Installation
-
-### Using Smithery (Recommended)
-
-```bash
-npx @smithery/cli install chatgpt-gpt-manager --client claude
-```
 
 ### Using NPM
 
@@ -35,46 +25,93 @@ docker pull samihalawa/chatgpt-gpt-manager
 docker run -p 8080:8080 -v $(pwd)/temp:/app/temp samihalawa/chatgpt-gpt-manager
 ```
 
+### Using Smithery
+
+```bash
+npx @smithery/cli run chatgpt-gpt-manager
+```
+
 ## Usage
 
-### With Claude
+### Starting the Server
 
-1. Start the MCP server:
-   ```bash
-   npx @smithery/cli run chatgpt-gpt-manager
-   ```
-
-2. Configure Claude to use this MCP server
-3. Use the following tools in your Claude prompts:
-
-- `browser_initialize`: Start browser session
-- `create_gpt`: Create a new custom GPT
-- `test_gpt`: Test a GPT with prompts
-- `browser_close`: Close the browser session
-
-### Example
-
-```
-Create a new custom GPT for me called "Recipe Assistant" that can suggest
-recipes based on available ingredients.
+```bash
+npx chatgpt-gpt-manager
 ```
 
-Claude will use the MCP server to automate the creation process.
+The server will start and be available on the specified port (default is 8080).
+
+### MCP Functions
+
+The server provides the following MCP functions:
+
+#### browser_initialize
+
+Initialize a browser session for ChatGPT automation.
+
+```json
+{
+  "function": "browser_initialize",
+  "arguments": {}
+}
+```
+
+#### create_gpt
+
+Create a new custom GPT on ChatGPT.
+
+```json
+{
+  "function": "create_gpt",
+  "arguments": {
+    "name": "My Test GPT",
+    "instructions": "You are a helpful assistant that provides information about planets."
+  }
+}
+```
+
+Optional parameters:
+- `options`: Additional options for GPT creation
+
+#### test_gpt
+
+Test a custom GPT with a specific prompt.
+
+```json
+{
+  "function": "test_gpt",
+  "arguments": {
+    "gptId": "g-abc123def456",
+    "prompt": "Tell me about Mars."
+  }
+}
+```
+
+#### browser_close
+
+Close the browser and release resources.
+
+```json
+{
+  "function": "browser_close",
+  "arguments": {}
+}
+```
 
 ## Configuration
 
-You can configure the server with the following options:
+The server accepts the following environment variables:
 
-```bash
-# Run in headless mode
-npx @smithery/cli run chatgpt-gpt-manager --config '{"headless":true}'
+- `HEADLESS`: Set to "true" to run the browser in headless mode (default: false)
+- `DEBUG`: Set to "true" to enable debug logging (default: false)
+- `SCREENSHOT_DIR`: Directory to store screenshots (default: "./temp")
+- `MAX_CONCURRENT_SESSIONS`: Maximum number of concurrent browser sessions (default: 3)
 
-# Enable debug logging
-npx @smithery/cli run chatgpt-gpt-manager --config '{"debugMode":true}'
+## Important Notes
 
-# Specify screenshot directory
-npx @smithery/cli run chatgpt-gpt-manager --config '{"screenshotDir":"./screenshots"}'
-```
+- This tool requires you to be logged in to ChatGPT. If not logged in, the browser window will open for manual login.
+- Custom GPT creation process might change as OpenAI updates the ChatGPT interface.
+- It is recommended to run with `HEADLESS=false` initially to see the process and ensure everything works correctly.
 
 ## License
 
