@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="300" viewBox="0 0 1200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="300" rx="12" fill="#0F172A"/>
+  <rect x="40" y="40" width="1120" height="220" rx="8" fill="#1E293B"/>
+  
+  <!-- Logo -->
+  <circle cx="150" cy="150" r="80" fill="#10A37F"/>
+  <path d="M125 120L190 150L125 180V120Z" fill="white"/>
+  
+  <!-- Text -->
+  <text x="270" y="130" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white">ChatGPT Custom GPT Manager</text>
+  <text x="270" y="190" font-family="Arial, sans-serif" font-size="24" fill="#94A3B8">Create, configure, and test your custom GPTs</text>
+  
+  <!-- Decorative Elements -->
+  <rect x="900" y="80" width="160" height="40" rx="8" fill="#0F172A" stroke="#10A37F" stroke-width="2"/>
+  <rect x="900" y="140" width="220" height="40" rx="8" fill="#0F172A" stroke="#10A37F" stroke-width="2"/>
+  <rect x="900" y="200" width="140" height="40" rx="8" fill="#0F172A" stroke="#10A37F" stroke-width="2"/>
+  
+  <!-- Code Lines -->
+  <text x="910" y="107" font-family="monospace" font-size="16" fill="#F7FAFC">initialize_session()</text>
+  <text x="910" y="167" font-family="monospace" font-size="16" fill="#F7FAFC">create_custom_gpt("name")</text>
+  <text x="910" y="227" font-family="monospace" font-size="16" fill="#F7FAFC">publish_gpt(id)</text>
+</svg> 

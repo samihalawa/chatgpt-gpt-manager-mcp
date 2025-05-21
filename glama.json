@@ -1,0 +1,77 @@
+{
+  "name": "chatgpt-gpt-manager",
+  "version": "1.0.0",
+  "description": "ChatGPT Custom GPT Manager - A Model Context Protocol tool for creating, managing, and testing custom GPTs on ChatGPT",
+  "author": "samihalawa",
+  "license": "MIT",
+  "homepage": "https://github.com/samihalawa/chatgpt-gpt-manager",
+  "repository": "https://github.com/samihalawa/chatgpt-gpt-manager",
+  "icon": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/icon.png",
+  "assets": {
+    "icon": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/icon.svg",
+    "screenshots": [
+      "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/demo1.png",
+      "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/demo2.png"
+    ],
+    "banner": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/banner.png"
+  },
+  "tags": [
+    "chatgpt",
+    "gpt",
+    "custom-gpt",
+    "management",
+    "automation",
+    "testing",
+    "mcp",
+    "browser-automation",
+    "playwright",
+    "web"
+  ],
+  "compatibility": {
+    "node": ">=18"
+  },
+  "settings": {
+    "headless": {
+      "type": "boolean",
+      "default": false,
+      "description": "Run browser in headless mode"
+    },
+    "debugMode": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable debug logging"
+    },
+    "screenshotDir": {
+      "type": "string",
+      "default": "./temp",
+      "description": "Directory to store screenshots"
+    },
+    "maxConcurrentSessions": {
+      "type": "number",
+      "default": 3,
+      "min": 1,
+      "max": 10,
+      "description": "Maximum number of concurrent browser sessions"
+    }
+  },
+  "installation": {
+    "methods": [
+      {
+        "type": "npm",
+        "command": "npm install -g chatgpt-gpt-manager"
+      },
+      {
+        "type": "docker",
+        "command": "docker pull samihalawa/chatgpt-gpt-manager:latest"
+      },
+      {
+        "type": "git",
+        "command": "git clone https://github.com/samihalawa/chatgpt-gpt-manager.git"
+      }
+    ],
+    "requirements": [
+      "Node.js v18 or later",
+      "npm v7 or later"
+    ]
+  }
+} 

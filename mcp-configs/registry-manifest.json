@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "type": "mcp-server",
+  "id": "chatgpt-gpt-manager",
+  "version": "1.0.0",
+  "name": "ChatGPT Custom GPT Manager",
+  "description": "MCP server for creating, managing, and testing custom GPTs on ChatGPT",
+  "author": "samihalawa",
+  "license": "MIT",
+  "repository": "https://github.com/samihalawa/chatgpt-gpt-manager",
+  "documentation": "https://github.com/samihalawa/chatgpt-gpt-manager#readme",
+  "keywords": [
+    "mcp",
+    "chatgpt",
+    "gpt",
+    "custom-gpt",
+    "management",
+    "automation",
+    "testing"
+  ],
+  "installMethods": [
+    {
+      "type": "npm",
+      "package": "chatgpt-gpt-manager",
+      "command": "npx chatgpt-gpt-manager"
+    },
+    {
+      "type": "docker",
+      "image": "samihalawa/chatgpt-gpt-manager",
+      "command": "docker run -p 8080:8080 -v $(pwd)/temp:/app/temp samihalawa/chatgpt-gpt-manager"
+    },
+    {
+      "type": "smithery",
+      "package": "chatgpt-gpt-manager",
+      "command": "npx @smithery/cli run chatgpt-gpt-manager"
+    }
+  ],
+  "resources": {
+    "icon": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/icon.svg"
+  },
+  "tools": [
+    {
+      "name": "browser_initialize",
+      "description": "Initialize browser for ChatGPT automation",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "create_gpt",
+      "description": "Create a new custom GPT in ChatGPT",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name for the custom GPT"
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Instructions for the custom GPT"
+          },
+          "options": {
+            "type": "object",
+            "description": "Additional options for GPT creation"
+          }
+        },
+        "required": ["name", "instructions"]
+      }
+    },
+    {
+      "name": "test_gpt",
+      "description": "Test a custom GPT with specific prompts",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "gptId": {
+            "type": "string",
+            "description": "ID of the GPT to test"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Prompt to test the GPT with"
+          }
+        },
+        "required": ["gptId", "prompt"]
+      }
+    },
+    {
+      "name": "browser_close",
+      "description": "Close the browser and release resources",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  ],
+  "requires": {
+    "node": ">=18.0.0",
+    "platform": ["linux", "darwin", "win32"]
+  }
+} 

@@ -1,0 +1,73 @@
+{
+  "type": "mcp-server",
+  "name": "chatgpt-gpt-manager",
+  "displayName": "ChatGPT Custom GPT Manager",
+  "version": "1.0.0",
+  "description": "MCP server for creating, managing, and testing custom GPTs on ChatGPT",
+  "author": "samihalawa",
+  "license": "MIT",
+  "icon": "publicresources/icon.svg",
+  "repository": "https://github.com/samihalawa/chatgpt-gpt-manager",
+  "runtime": {
+    "type": "node",
+    "minVersion": "18.0.0"
+  },
+  "launchCommand": {
+    "command": "node",
+    "args": ["dist/index.js"]
+  },
+  "config": {
+    "headless": {
+      "type": "boolean",
+      "default": false,
+      "description": "Run browser in headless mode"
+    },
+    "debugMode": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable debug logging"
+    },
+    "screenshotDir": {
+      "type": "string",
+      "default": "./temp",
+      "description": "Directory to store screenshots"
+    },
+    "maxConcurrentSessions": {
+      "type": "number",
+      "default": 3,
+      "minimum": 1,
+      "maximum": 10,
+      "description": "Maximum number of concurrent browser sessions"
+    }
+  },
+  "permissions": [
+    {
+      "name": "browser",
+      "description": "Access to launch and control a browser"
+    },
+    {
+      "name": "filesystem",
+      "description": "Access to read/write files (for screenshots)"
+    }
+  ],
+  "resources": {
+    "memory": "medium",
+    "cpu": "medium"
+  },
+  "tools": [
+    "browser_initialize",
+    "create_gpt",
+    "test_gpt",
+    "browser_close"
+  ],
+  "categories": [
+    "automation",
+    "chatgpt",
+    "gpt",
+    "management"
+  ],
+  "requirements": {
+    "memory": "512MB",
+    "cpu": 1
+  }
+} 

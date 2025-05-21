@@ -1,34 +1,66 @@
-FROM node:18-bullseye-slim
+FROM node:18-slim
 
-# Install dependencies for Puppeteer
+# Install required dependencies
 RUN apt-get update && apt-get install -y \
-    chromium \
-    fonts-ipafont-gothic \
-    fonts-wqy-zenhei \
-    fonts-thai-tlwg \
-    fonts-kacst \
-    fonts-freefont-ttf \
+    wget \
+    gnupg \
+    ca-certificates \
+    fontconfig \
+    locales \
     libxss1 \
+    libxtst6 \
+    libnss3 \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Set environment variables
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+# Install Puppeteer dependencies
+RUN apt-get update && apt-get install -y \
+    libgtk-3-0 \
+    libasound2 \
+    libxshmfence1 \
+    libgbm1 \
+    libnss3 \
+    libxss1 \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxi6 \
+    libxtst6 \
+    liblcms2-2 \
+    libxcb-dri3-0 \
+    libdrm2 \
+    libgbm1 \
+    libxshmfence1 \
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
 
+# Create app directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
-# Copy application code
+# Copy application files
 COPY . .
 
-# Build the application
+# Build TypeScript code
 RUN npm run build
 
-# Command will be provided by smithery.yaml
+# Expose the MCP port
+EXPOSE 8080
+
+# Create a directory for screenshots
+RUN mkdir -p /app/temp
+VOLUME /app/temp
+
+# Environment variables
+ENV NODE_ENV=production
+ENV HEADLESS=true
+
+# Start the MCP server
 CMD ["node", "dist/index.js"]

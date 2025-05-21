@@ -1,1 +1,76 @@
-{"name": "chatgpt-gpt-manager", "version": "1.0.0", "description": "Model Context Protocol for managing ChatGPT custom GPTs", "type": "module", "main": "dist/index.js", "scripts": {"build": "tsc", "dev": "tsx src/index.ts", "start": "node dist/index.js", "test": "npx @modelcontextprotocol/inspector ."}, "dependencies": {"@modelcontextprotocol/sdk": "^0.6.0", "puppeteer": "^23.0.0"}, "devDependencies": {"@types/node": "^20.11.24", "tsx": "^4.7.0", "typescript": "^5.3.3"}}
+{
+  "name": "chatgpt-gpt-manager",
+  "version": "1.0.0",
+  "description": "Model Context Protocol for managing ChatGPT custom GPTs",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "chatgpt-gpt-manager": "dist/index.js",
+    "gpt-manager": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "prepare": "npm run build",
+    "test": "npx @modelcontextprotocol/inspector .",
+    "release": "npm version patch && ./scripts/mcp-deploy.sh npm",
+    "deploy:npm": "./scripts/mcp-deploy.sh npm",
+    "deploy:docker": "./scripts/mcp-deploy.sh docker",
+    "deploy:all": "./scripts/mcp-deploy.sh all",
+    "smithery": "node scripts/run-with-smithery.js",
+    "smithery:key": "./scripts/run-with-smithery-key.sh",
+    "smithery:install": "./scripts/smithery-install.sh",
+    "smithery:run": "./scripts/smithery-run.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samihalawa/chatgpt-gpt-manager.git"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0",
+    "puppeteer": "^23.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "keywords": [
+    "chatgpt",
+    "gpt",
+    "custom-gpt",
+    "management",
+    "automation",
+    "testing",
+    "mcp",
+    "modelcontextprotocol",
+    "browser-automation",
+    "puppeteer",
+    "ui-testing"
+  ],
+  "author": "samihalawa",
+  "license": "MIT",
+  "cdn": {
+    "icons": {
+      "png": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/icon.png",
+      "svg": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/icon.svg"
+    },
+    "screenshots": {
+      "demo1": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/demo1.png",
+      "demo2": "https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/demo2.png"
+    }
+  }
+}

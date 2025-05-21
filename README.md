@@ -1,116 +1,80 @@
-# ChatGPT Custom GPT Manager MCP
+# ChatGPT Custom GPT Manager
 
-A Model Context Protocol (MCP) tool for creating, managing, and testing custom GPTs on ChatGPT.
+An MCP (Model Context Protocol) server that helps you create, manage, and test custom GPTs on ChatGPT.
+
+<div align="center">
+  <img src="https://cdn.jsdelivr.net/gh/samihalawa/chatgpt-gpt-manager@main/publicresources/banner.svg" alt="ChatGPT GPT Manager Banner" width="800"/>
+</div>
 
 ## Features
 
-- Create new custom GPTs with specified name, description, and instructions
-- Add different types of actions (API, Code Interpreter, Browsing)
-- Configure GPT settings (web browsing, code interpreter, image generation)
-- Upload knowledge files to your GPT
-- Save and publish custom GPTs
-- Test GPTs with sample prompts
-- List all your custom GPTs
-- Take screenshots for documentation
+- 🤖 Create custom GPTs automatically
+- 🧪 Test custom GPTs with prompts
+- 📊 Capture test results and screenshots
+- 🔄 Manage multiple GPTs efficiently
+- 🚀 Compatible with any Claude client supporting MCP
 
 ## Installation
 
-1. Clone this repository
-2. Install dependencies:
-   ```
-   npm install
-   ```
-3. Build the project:
-   ```
-   npm run build
-   ```
+### Using Smithery (Recommended)
+
+```bash
+npx @smithery/cli install chatgpt-gpt-manager --client claude
+```
+
+### Using NPM
+
+```bash
+npm install -g chatgpt-gpt-manager
+```
+
+### Using Docker
+
+```bash
+docker pull samihalawa/chatgpt-gpt-manager
+docker run -p 8080:8080 -v $(pwd)/temp:/app/temp samihalawa/chatgpt-gpt-manager
+```
 
 ## Usage
 
-This MCP tool can be used with Claude to help manage and test your ChatGPT custom GPTs. Here's a typical workflow:
+### With Claude
 
-### Example Usage Flow
-
-1. Initialize a session:
-   ```
-   initialize_gpt_manager with session_id="my-gpt-session"
+1. Start the MCP server:
+   ```bash
+   npx @smithery/cli run chatgpt-gpt-manager
    ```
 
-2. Log in to ChatGPT:
-   ```
-   login_to_chatgpt with session_id="my-gpt-session"
-   ```
-   (Follow the login prompts in the opened browser)
+2. Configure Claude to use this MCP server
+3. Use the following tools in your Claude prompts:
 
-3. Create a new GPT:
-   ```
-   create_new_gpt with
-     session_id="my-gpt-session",
-     name="Web Browser Assistant",
-     description="A GPT that helps with web browsing tasks",
-     instructions="You are a helpful assistant that specializes in web browsing. Help users navigate websites, find information, and complete online tasks."
-   ```
+- `browser_initialize`: Start browser session
+- `create_gpt`: Create a new custom GPT
+- `test_gpt`: Test a GPT with prompts
+- `browser_close`: Close the browser session
 
-4. Configure GPT settings:
-   ```
-   configure_gpt_settings with
-     session_id="my-gpt-session",
-     web_browsing=true,
-     code_interpreter=true,
-     image_generation=false,
-     privacy_mode="public"
-   ```
+### Example
 
-5. Add an action:
-   ```
-   add_gpt_action with
-     session_id="my-gpt-session",
-     action_type="API",
-     api_schema="{\"openapi\":\"3.0.0\",\"info\":{\"title\":\"Example API\",\"version\":\"1.0.0\"},\"paths\":{}}"
-   ```
+```
+Create a new custom GPT for me called "Recipe Assistant" that can suggest
+recipes based on available ingredients.
+```
 
-6. Upload knowledge (optional):
-   ```
-   upload_gpt_file with
-     session_id="my-gpt-session",
-     file_path="/path/to/knowledge.pdf",
-     file_type="knowledge"
-   ```
+Claude will use the MCP server to automate the creation process.
 
-7. Save and publish the GPT:
-   ```
-   save_and_publish_gpt with session_id="my-gpt-session"
-   ```
+## Configuration
 
-8. Test the GPT with prompts:
-   ```
-   test_gpt with
-     session_id="my-gpt-session",
-     test_prompts=["Help me with browser automation", "How do I navigate to a specific website?"]
-   ```
+You can configure the server with the following options:
 
-9. List my GPTs:
-   ```
-   list_my_gpts with session_id="my-gpt-session"
-   ```
+```bash
+# Run in headless mode
+npx @smithery/cli run chatgpt-gpt-manager --config '{"headless":true}'
 
-10. Close the session when done:
-    ```
-    close_session with session_id="my-gpt-session"
-    ```
+# Enable debug logging
+npx @smithery/cli run chatgpt-gpt-manager --config '{"debugMode":true}'
 
-## Implementation Notes
-
-- This MCP uses Playwright for browser automation
-- The tool adapts to the ChatGPT UI by using both dedicated selectors and text-based searching
-- Screenshots are supported for debugging and documentation purposes
-- Multiple GPT creation sessions can be managed concurrently
-
-## Troubleshooting
-
-- If selectors are not working, the tool attempts alternative approaches
-- Users need to manually log in to ChatGPT due to authentication requirements
-- For any issues, check the logs or take screenshots to diagnose problems
+# Specify screenshot directory
+npx @smithery/cli run chatgpt-gpt-manager --config '{"screenshotDir":"./screenshots"}'
+```
 
 ## License
 

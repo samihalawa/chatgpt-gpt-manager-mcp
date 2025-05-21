@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="100" fill="#10A37F"/>
+  <rect x="96" y="148" width="320" height="216" rx="16" fill="#1A7F64"/>
+  <rect x="112" y="164" width="288" height="184" rx="8" fill="#F5F5F5"/>
+  <circle cx="256" cy="256" r="80" fill="#10A37F"/>
+  <path d="M231 226L281 256L231 286V226Z" fill="white"/>
+  <rect x="136" y="184" width="240" height="32" rx="4" fill="#E0E0E0"/>
+  <rect x="136" y="232" width="80" height="80" rx="8" fill="#E0E0E0"/>
+  <rect x="296" y="232" width="80" height="80" rx="8" fill="#E0E0E0"/>
+  <rect x="96" y="96" width="40" height="40" rx="8" fill="#1A7F64"/>
+  <path d="M116 116H136M116 126H136M116 136H136" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <rect x="144" y="96" width="224" height="40" rx="8" fill="#1A7F64"/>
+  <text x="154" y="124" font-family="Arial, sans-serif" font-size="20" fill="white">Custom GPT Manager</text>
+  <path d="M96 384H416" stroke="#1A7F64" stroke-width="8" stroke-linecap="round"/>
+  <path d="M176 416H336" stroke="#1A7F64" stroke-width="8" stroke-linecap="round"/>
+  <path d="M124 106L136 118M136 106L124 118" stroke="white" stroke-width="3" stroke-linecap="round"/>
+</svg> 

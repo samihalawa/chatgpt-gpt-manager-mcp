@@ -1,27 +1,68 @@
 # Smithery configuration file
-startCommand:
-  type: stdio
-  configSchema:
-    type: object
-    properties:
-      headless:
-        type: boolean
-        description: "Run browser in headless mode"
-        default: false
-      debugMode:
-        type: boolean
-        description: "Enable debug logging"
-        default: false
-  commandFunction:
-    |-
-    (config) => ({
-      command: 'node',
-      args: ['dist/index.js'],
-      env: {
-        HEADLESS: config.headless ? 'true' : 'false',
-        DEBUG: config.debugMode ? 'true' : 'false'
-      }
-    })
+name: chatgpt-gpt-manager
+version: 1.0.0
+description: MCP server for creating, managing, and testing custom GPTs on ChatGPT
+author: samihalawa
+license: MIT
+homepage: https://github.com/samihalawa/chatgpt-gpt-manager
+repository: https://github.com/samihalawa/chatgpt-gpt-manager
+
+runtime:
+  type: node
+  version: ">=18"
+
 build:
-  dockerfile: Dockerfile
-  dockerBuildPath: .
+  command: npm run build
+
+entrypoint:
+  command: node
+  args:
+    - dist/index.js
+
+config:
+  headless:
+    type: boolean
+    default: false
+    description: Run browser in headless mode
+  debugMode:
+    type: boolean
+    default: false
+    description: Enable debug logging
+  screenshotDir:
+    type: string
+    default: ./temp
+    description: Directory to store screenshots
+  maxConcurrentSessions:
+    type: number
+    default: 3
+    min: 1
+    max: 10
+    description: Maximum number of concurrent browser sessions
+
+docker:
+  base: node:18-slim
+  workdir: /app
+  volumes:
+    - name: screenshots
+      mountPath: /app/temp
+  ports:
+    - 8080:8080
+  env:
+    NODE_ENV: production
+
+resources:
+  type: mcp-server
+  icon: publicresources/icon.svg
+  screenshots:
+    - publicresources/demo1.png
+    - publicresources/demo2.png
+
+tags:
+  - chatgpt
+  - gpt
+  - custom-gpt
+  - management
+  - automation
+  - testing
+  - mcp
+  - browser-automation
