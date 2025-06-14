@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/samihalawa/chatgpt-gpt-manager#readme",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.6.2",
+    "@modelcontextprotocol/sdk": "^0.6.0",
     "puppeteer": "^22.0.0"
   },
   "devDependencies": {

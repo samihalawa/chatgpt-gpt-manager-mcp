@@ -1,14 +1,26 @@
 #!/usr/bin/env node
 
-import { MCPServer } from '@modelcontextprotocol/sdk';
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
+
+interface CreateGPTArgs {
+  name: string;
+  instructions: string;
+  options?: any;
+}
+
+interface TestGPTArgs {
+  gptId: string;
+  prompt: string;
+}
 
 // Define main class for ChatGPT GPT Manager
 class ChatGPTGPTManager {
   private browser: puppeteer.Browser | null = null;
-  private config = {
+  public config = {
     headless: process.env.HEADLESS === 'true' || false,
     debugMode: process.env.DEBUG === 'true' || false,
     screenshotDir: process.env.SCREENSHOT_DIR || './temp',
@@ -24,7 +36,7 @@ class ChatGPTGPTManager {
 
   async initialize() {
     this.browser = await puppeteer.launch({
-      headless: this.config.headless ? 'new' : false,
+      headless: this.config.headless,
       defaultViewport: { width: 1280, height: 800 },
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
     });
@@ -51,13 +63,22 @@ class ChatGPTGPTManager {
     await page.type('input[placeholder="Name your GPT"]', name);
     
     // Fill in instructions
-    await page.waitForSelector('textarea[placeholder="What does your GPT do? How does it behave?"]');
-    await page.type('textarea[placeholder="What does your GPT do? How does it behave?"]', instructions);
+    await page.waitForSelector('textarea[placeholder="What does this GPT do? How does it behave? What should it avoid doing?"]');
+    await page.type('textarea[placeholder="What does this GPT do? How does it behave? What should it avoid doing?"]', instructions);
     
-    // Take a screenshot
-    await page.screenshot({ path: path.join(this.config.screenshotDir, `${name.replace(/[^a-z0-9]/gi, '_')}_creation.png`) });
+    // Apply additional options if provided
+    if (options.capabilities) {
+      // Handle capabilities checkboxes
+      for (const capability of options.capabilities) {
+        const checkbox = await page.$(`input[type="checkbox"][value="${capability}"]`);
+        if (checkbox) await checkbox.click();
+      }
+    }
     
-    // Return page for further operations
+    // Take screenshot
+    const screenshotPath = path.join(this.config.screenshotDir, `${name.replace(/[^a-z0-9]/gi, '_')}_creation.png`);
+    await page.screenshot({ path: screenshotPath });
+    
     return page;
   }
 
@@ -67,32 +88,34 @@ class ChatGPTGPTManager {
     const page = await this.browser!.newPage();
     await page.goto(`https://chat.openai.com/g/${gptId}`);
     
-    // Type prompt
+    // Wait for chat interface
     await page.waitForSelector('textarea[placeholder="Message"]');
     await page.type('textarea[placeholder="Message"]', prompt);
     
-    // Press Enter to send
+    // Submit message
     await page.keyboard.press('Enter');
     
     // Wait for response
-    await page.waitForSelector('.markdown-content');
+    await page.waitForTimeout(5000); // Wait for response to generate
     
-    // Get the response text
-    const responseText = await page.evaluate(() => {
-      const elements = document.querySelectorAll('.markdown-content');
-      return elements[elements.length - 1].textContent || '';
+    // Take screenshot
+    const screenshotPath = path.join(this.config.screenshotDir, `${gptId}_test.png`);
+    await page.screenshot({ path: screenshotPath });
+    
+    // Extract response text
+    const response = await page.evaluate(() => {
+      const messages = document.querySelectorAll('.prose');
+      return messages[messages.length - 1]?.textContent || 'No response found';
     });
     
-    // Take a screenshot
-    await page.screenshot({ path: path.join(this.config.screenshotDir, `${gptId}_test.png`) });
-    
-    return responseText;
+    return response;
   }
 
   async close() {
     if (this.browser) {
       await this.browser.close();
       this.browser = null;
+      console.log('Browser closed');
     }
   }
 }
@@ -101,46 +124,109 @@ class ChatGPTGPTManager {
 async function main() {
   const gptManager = new ChatGPTGPTManager();
   
-  const server = new MCPServer({
+  const server = new Server({
     name: 'chatgpt-gpt-manager',
     version: '1.0.0',
-  });
-
-  // Register MCP functions
-  server.addTool('browser_initialize', async () => {
-    await gptManager.initialize();
-    return { success: true, message: 'Browser initialized successfully' };
-  });
-
-  server.addTool('create_gpt', async ({ name, instructions, options }) => {
-    try {
-      const page = await gptManager.createGPT(name, instructions, options);
-      return {
-        success: true,
-        message: `GPT "${name}" creation started`,
-        screenshot: path.join(gptManager.config.screenshotDir, `${name.replace(/[^a-z0-9]/gi, '_')}_creation.png`)
-      };
-    } catch (error) {
-      return { success: false, error: error.message };
+  }, {
+    capabilities: {
+      tools: {}
     }
   });
 
-  server.addTool('test_gpt', async ({ gptId, prompt }) => {
-    try {
-      const response = await gptManager.testGPT(gptId, prompt);
-      return {
-        success: true,
-        response,
-        screenshot: path.join(gptManager.config.screenshotDir, `${gptId}_test.png`)
-      };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+  // Register MCP tools
+  server.setRequestHandler('tools/list', async () => {
+    return {
+      tools: [
+        {
+          name: 'browser_initialize',
+          description: 'Initialize the browser for ChatGPT automation',
+          inputSchema: {
+            type: 'object',
+            properties: {}
+          }
+        },
+        {
+          name: 'create_gpt',
+          description: 'Create a new custom GPT',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              name: { type: 'string', description: 'Name of the GPT' },
+              instructions: { type: 'string', description: 'Instructions for the GPT' },
+              options: { type: 'object', description: 'Additional options' }
+            },
+            required: ['name', 'instructions']
+          }
+        },
+        {
+          name: 'test_gpt',
+          description: 'Test a GPT with a prompt',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              gptId: { type: 'string', description: 'ID of the GPT to test' },
+              prompt: { type: 'string', description: 'Test prompt' }
+            },
+            required: ['gptId', 'prompt']
+          }
+        },
+        {
+          name: 'browser_close',
+          description: 'Close the browser',
+          inputSchema: {
+            type: 'object',
+            properties: {}
+          }
+        }
+      ]
+    };
   });
 
-  server.addTool('browser_close', async () => {
-    await gptManager.close();
-    return { success: true, message: 'Browser closed successfully' };
+  server.setRequestHandler('tools/call', async (request) => {
+    const { name, arguments: args } = request.params;
+    
+    switch (name) {
+      case 'browser_initialize':
+        await gptManager.initialize();
+        return { content: [{ type: 'text', text: 'Browser initialized successfully' }] };
+        
+      case 'create_gpt': {
+        const { name, instructions, options } = args as CreateGPTArgs;
+        try {
+          const page = await gptManager.createGPT(name, instructions, options);
+          return {
+            content: [{
+              type: 'text',
+              text: `GPT "${name}" creation started. Screenshot saved to ${path.join(gptManager.config.screenshotDir, `${name.replace(/[^a-z0-9]/gi, '_')}_creation.png`)}`
+            }]
+          };
+        } catch (error: any) {
+          return { content: [{ type: 'text', text: `Error: ${error.message}` }] };
+        }
+      }
+      
+      case 'test_gpt': {
+        const { gptId, prompt } = args as TestGPTArgs;
+        try {
+          const response = await gptManager.testGPT(gptId, prompt);
+          return {
+            content: [{
+              type: 'text',
+              text: `Response: ${response}\nScreenshot saved to ${path.join(gptManager.config.screenshotDir, `${gptId}_test.png`)}`
+            }]
+          };
+        } catch (error: any) {
+          return { content: [{ type: 'text', text: `Error: ${error.message}` }] };
+        }
+      }
+      
+      case 'browser_close':
+        await gptManager.close();
+        return { content: [{ type: 'text', text: 'Browser closed successfully' }] };
+        
+      default:
+        return { content: [{ type: 'text', text: `Unknown tool: ${name}` }] };
+    }
   });
 
   // Handle shutdown
@@ -151,8 +237,9 @@ async function main() {
   });
 
   // Start the server
-  await server.listen();
-  console.log(`ChatGPT GPT Manager MCP server running on ${server.address}`);
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error('ChatGPT GPT Manager MCP server started');
 }
 
 main().catch(console.error);
