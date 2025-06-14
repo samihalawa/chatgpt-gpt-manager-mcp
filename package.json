@@ -1,10 +1,10 @@
 {
-  "name": "chatgpt-gpt-manager",
+  "name": "chatgpt-gpt-manager-mcp",
   "version": "1.0.0",
   "description": "MCP server for creating, managing, and testing custom GPTs on ChatGPT",
   "main": "dist/index.js",
   "bin": {
-    "chatgpt-gpt-manager": "dist/index.js"
+    "chatgpt-gpt-manager-mcp": "dist/index.js"
   },
   "files": [
     "dist",
