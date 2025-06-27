@@ -29,7 +29,7 @@ const TestGPTSchema = z.object({
 class ChatGPTGPTManager {
   private browser: Browser | null = null;
   public config = {
-    headless: process.env.HEADLESS === 'true' || false,
+    headless: process.env.HEADLESS !== 'false', // Default to true for performance
     debugMode: process.env.DEBUG_MODE === 'true' || false,
     screenshotDir: process.env.SCREENSHOT_DIR || './temp',
     maxConcurrentSessions: parseInt(process.env.MAX_CONCURRENT_SESSIONS || '3')
@@ -66,6 +66,29 @@ class ChatGPTGPTManager {
     }
     
     return this.browser;
+  }
+
+  // Intelligent waiting for ChatGPT response completion
+  private async waitForResponse(page: Page, timeout = 30000): Promise<void> {
+    try {
+      // First, wait for the stop button to appear (response started)
+      await page.waitForSelector('button[aria-label*="Stop"]', { timeout: 5000 });
+      
+      // Then wait for it to disappear (response completed)
+      await page.waitForSelector('button[aria-label*="Stop"]', { 
+        hidden: true, 
+        timeout: timeout 
+      });
+    } catch (error) {
+      // Fallback: look for other completion indicators
+      try {
+        await page.waitForSelector('[data-response-complete]', { timeout: timeout * 0.5 });
+      } catch {
+        // If no specific indicators, wait for network idle as last resort
+        await page.waitForLoadState?.('networkidle') || 
+              page.waitForFunction('!document.querySelector("button[aria-label*=\'Stop\']")', { timeout: timeout * 0.3 });
+      }
+    }
   }
 
   async createGPT(name: string, instructions: string, options: any = {}): Promise<Page> {
@@ -136,21 +159,8 @@ class ChatGPTGPTManager {
       // Submit message
       await page.keyboard.press('Enter');
       
-      // Wait for response to start generating
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Wait for response to complete (look for stop button to disappear)
-      try {
-        await page.waitForSelector('button[aria-label*="Stop"]', { 
-          hidden: true, 
-          timeout: 30000 
-        });
-      } catch (e) {
-        // If stop button never appears or we timeout, continue anyway
-      }
-      
-      // Additional wait to ensure response is complete
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Wait for response to start and complete intelligently
+      await this.waitForResponse(page);
       
       // Take screenshot
       const screenshotPath = path.join(this.config.screenshotDir, `${gptId}_test.png`);
