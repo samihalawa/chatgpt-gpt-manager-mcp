@@ -1,0 +1,8 @@
+{
+    "actorSpecification": 1,
+    "name": "chatgpt-gpt-manager-mcp",
+    "title": "ChatGPT GPT Manager MCP",
+    "description": "MCP server for managing ChatGPT GPTs",
+    "version": "0.1",
+    "dockerfile": "./Dockerfile"
+}
