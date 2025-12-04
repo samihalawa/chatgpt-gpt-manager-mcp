@@ -1,8 +1,9 @@
 # Build stage
 FROM node:18-alpine AS builder
 WORKDIR /app
-COPY . .
+COPY package*.json ./
 RUN npm install --ignore-scripts
+COPY . .
 RUN npm run build
 
 # Production stage
