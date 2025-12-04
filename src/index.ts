@@ -84,9 +84,8 @@ class ChatGPTGPTManager {
       try {
         await page.waitForSelector('[data-response-complete]', { timeout: timeout * 0.5 });
       } catch {
-        // If no specific indicators, wait for network idle as last resort
-        await page.waitForLoadState?.('networkidle') || 
-              page.waitForFunction('!document.querySelector("button[aria-label*=\'Stop\']")', { timeout: timeout * 0.3 });
+        // If no specific indicators, wait for stop button to be removed as last resort
+        await page.waitForFunction('!document.querySelector("button[aria-label*=\'Stop\']")', { timeout: timeout * 0.3 });
       }
     }
   }
